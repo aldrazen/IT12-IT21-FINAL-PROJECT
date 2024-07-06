@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->addAddress($_POST['email']);
             $mail->Subject = "Account Activation";
             $mail->Body = <<<END
-            Click <a href="http://localhost/IT12-FINAL-PROJECT/customer-database/activateAccount.php?token=$token">here</a> to activate your account.
+            Click <a href="http://localhost/IT12-IT21-FINAL-PROJECT/customer-database/activateAccount.php?token=$token">here</a> to activate your account.
           END;
             try {
                 $mail->send();

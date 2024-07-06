@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Dec 15, 2023 at 09:31 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.1.12
+-- Host: localhost
+-- Generation Time: Jul 06, 2024 at 08:08 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -67,18 +67,19 @@ CREATE TABLE `customer_tbl` (
   `customer_username` varchar(50) NOT NULL,
   `customer_number` varchar(15) NOT NULL,
   `customer_address` varchar(50) NOT NULL,
-  `customer_password` varchar(50) NOT NULL
+  `customer_password` varchar(255) NOT NULL,
+  `reset_token_hash` varchar(256) DEFAULT NULL,
+  `reset_token_expiry` datetime DEFAULT NULL,
+  `account_status_token` varchar(256) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `customer_tbl`
 --
 
-INSERT INTO `customer_tbl` (`customer_ID`, `customer_name`, `customer_username`, `customer_number`, `customer_address`, `customer_password`) VALUES
-(3, 'Al Drazen Sagarino', 'draz', '09303382904', 'Chino Hills, California USA', 'localhero123'),
-(17, 'liz sagarino', 'liz123', '09303214237', 'block 5 lot 13 phase 3 NHA Bangkal Davao City', 'liz123'),
-(18, 'calum scott', 'calum123', '09091013645', 'block 5 lot 13 phase 3 NHA Bangkal Davao City', 'password123'),
-(20, 'Jason Mraz', 'geekinthepink', '09091013645', 'Geek in the Pink', 'love');
+INSERT INTO `customer_tbl` (`customer_ID`, `customer_name`, `customer_username`, `customer_number`, `customer_address`, `customer_password`, `reset_token_hash`, `reset_token_expiry`, `account_status_token`) VALUES
+(37, 'colsongamings@gmail.com', 'test', '090910136411', 'test', '$2y$10$ZdjySljQINZGT0nCf66n/e9umJ.cW1rcbMOrLBdBEMiz/P2KII8gS', '8560e991914c5e209d1952c0dd34b36b78a73b59f67c3f221a57e89d2ea3a93d', '2024-07-03 06:49:24', NULL),
+(53, 'a.sagarino.531681@umindanao.edu.ph', 'Al Drazen Sagarino', '09091013645', 'nha bangkal men', '$2y$10$Pvo9ts/HilmxgZRctWKJ1eKV3Dl.zOopJeWsyc8iAGD4Jv7FB6vOO', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -95,18 +96,6 @@ CREATE TABLE `order_items_tbl` (
   `item_quantity` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `order_items_tbl`
---
-
-INSERT INTO `order_items_tbl` (`item_ID`, `order_ID`, `prod_ID`, `prod_size`, `item_price`, `item_quantity`) VALUES
-(25, 16, 30, 'M', 650.00, 1),
-(26, 16, 29, 'L', 600.00, 1),
-(33, 20, 29, 'XL', 600.00, 1),
-(34, 21, 30, 'XL', 1300.00, 2),
-(35, 22, 28, 'L', 650.00, 1),
-(36, 23, 29, 'M', 600.00, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -120,17 +109,6 @@ CREATE TABLE `order_tbl` (
   `order_status` varchar(100) NOT NULL,
   `total_price` double(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `order_tbl`
---
-
-INSERT INTO `order_tbl` (`order_ID`, `customer_ID`, `order_date`, `order_status`, `total_price`) VALUES
-(16, 3, '2023-12-12', 'Confirmed', 1250.00),
-(20, 3, '2023-12-15', 'Confirmed', 600.00),
-(21, 3, '2023-12-15', 'Confirmed', 1300.00),
-(22, 3, '2023-12-16', 'Confirmed', 650.00),
-(23, 3, '2023-12-16', 'Confirmed', 600.00);
 
 -- --------------------------------------------------------
 
@@ -153,9 +131,10 @@ CREATE TABLE `product_tbl` (
 
 INSERT INTO `product_tbl` (`prod_ID`, `shirt_name`, `prod_price`, `prod_quantity`, `prod_image`, `prod_status`) VALUES
 (28, 'GRENADE BUDS', 650.00, 20, 'grenade.jpg', 'In Stock'),
-(29, 'JOINT ISLAND', 600.00, 20, 'island-black.jpg', 'In Stock'),
-(30, 'FORBIDDEN HONEY', 650.00, 20, 'honey.jpg', 'In Stock'),
-(31, 'BONG ISLAND', 600.00, 20, 'island-white.jpg', 'In Stock');
+(29, 'JOINT ISLAND', 600.00, 18, 'island-black.jpg', 'In Stock'),
+(30, 'FORBIDDEN HONEY', 650.00, 15, 'honey.jpg', 'In Stock'),
+(31, 'BONG ISLAND', 600.00, 19, 'island-white.jpg', 'In Stock'),
+(35, 'test', 599.00, 13, 'ph-11134201-7r98p-lrofwcxc27c99c.jpeg', 'In Stock');
 
 -- --------------------------------------------------------
 
@@ -201,7 +180,9 @@ ALTER TABLE `cart_tbl`
 --
 ALTER TABLE `customer_tbl`
   ADD PRIMARY KEY (`customer_ID`),
-  ADD UNIQUE KEY `customer_username` (`customer_username`);
+  ADD UNIQUE KEY `customer_username` (`customer_username`),
+  ADD UNIQUE KEY `reset_token_hash` (`reset_token_hash`),
+  ADD UNIQUE KEY `account_status_token` (`account_status_token`);
 
 --
 -- Indexes for table `order_items_tbl`
@@ -244,31 +225,31 @@ ALTER TABLE `admin_tbl`
 -- AUTO_INCREMENT for table `cart_tbl`
 --
 ALTER TABLE `cart_tbl`
-  MODIFY `cart_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `cart_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `customer_tbl`
 --
 ALTER TABLE `customer_tbl`
-  MODIFY `customer_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `customer_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `order_items_tbl`
 --
 ALTER TABLE `order_items_tbl`
-  MODIFY `item_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `item_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `order_tbl`
 --
 ALTER TABLE `order_tbl`
-  MODIFY `order_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `order_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `product_tbl`
 --
 ALTER TABLE `product_tbl`
-  MODIFY `prod_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `prod_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `size_tbl`

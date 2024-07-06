@@ -30,7 +30,7 @@ if (isset($_POST["email"])) {
           $mail->addAddress($userEmail);
           $mail->Subject = "Password Reset";
           $mail->Body = <<<END
-            Click <a href="http://localhost/IT12-FINAL-PROJECT/customer/resetPasswordForm.php?token=$token">here</a> to reset your password.
+            Click <a href="http://localhost/IT12-IT21-FINAL-PROJECT/customer/resetPasswordForm.php?token=$token">here</a> to reset your password.
           END;
           try {
             $mail->send();
