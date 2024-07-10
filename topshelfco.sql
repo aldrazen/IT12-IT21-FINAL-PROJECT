@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 06, 2024 at 08:08 AM
+-- Generation Time: Jul 10, 2024 at 03:10 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -55,6 +55,13 @@ CREATE TABLE `cart_tbl` (
   `cart_quantity` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `cart_tbl`
+--
+
+INSERT INTO `cart_tbl` (`cart_ID`, `customer_ID`, `prod_ID`, `size_ID`, `cart_quantity`) VALUES
+(101, 57, 29, 3, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -79,7 +86,7 @@ CREATE TABLE `customer_tbl` (
 
 INSERT INTO `customer_tbl` (`customer_ID`, `customer_name`, `customer_username`, `customer_number`, `customer_address`, `customer_password`, `reset_token_hash`, `reset_token_expiry`, `account_status_token`) VALUES
 (37, 'colsongamings@gmail.com', 'test', '090910136411', 'test', '$2y$10$ZdjySljQINZGT0nCf66n/e9umJ.cW1rcbMOrLBdBEMiz/P2KII8gS', '8560e991914c5e209d1952c0dd34b36b78a73b59f67c3f221a57e89d2ea3a93d', '2024-07-03 06:49:24', NULL),
-(53, 'a.sagarino.531681@umindanao.edu.ph', 'Al Drazen Sagarino', '09091013645', 'nha bangkal men', '$2y$10$Pvo9ts/HilmxgZRctWKJ1eKV3Dl.zOopJeWsyc8iAGD4Jv7FB6vOO', NULL, NULL, NULL);
+(57, 'm.fuentes.523129@umindanao.edu.ph', 'Marianne Lou Fuentes', '09091013645', 'San Antonio Spurs', '$2y$10$19MZRhQNyP1R2SF6x/E0y.Cm8foPDNJWxYVW6PN6rfiX2kNa4Pa/G', '6abb41272d937aa0c98ad13829a47085d02c72d02fb626311b7ec86d42d52cc2', '2024-07-09 06:56:19', NULL);
 
 -- --------------------------------------------------------
 
@@ -96,6 +103,13 @@ CREATE TABLE `order_items_tbl` (
   `item_quantity` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `order_items_tbl`
+--
+
+INSERT INTO `order_items_tbl` (`item_ID`, `order_ID`, `prod_ID`, `prod_size`, `item_price`, `item_quantity`) VALUES
+(49, 33, 30, 'XL', 650.00, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -109,6 +123,13 @@ CREATE TABLE `order_tbl` (
   `order_status` varchar(100) NOT NULL,
   `total_price` double(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_tbl`
+--
+
+INSERT INTO `order_tbl` (`order_ID`, `customer_ID`, `order_date`, `order_status`, `total_price`) VALUES
+(33, 57, '2024-07-09', 'Order Placed', 650.00);
 
 -- --------------------------------------------------------
 
@@ -132,9 +153,9 @@ CREATE TABLE `product_tbl` (
 INSERT INTO `product_tbl` (`prod_ID`, `shirt_name`, `prod_price`, `prod_quantity`, `prod_image`, `prod_status`) VALUES
 (28, 'GRENADE BUDS', 650.00, 20, 'grenade.jpg', 'In Stock'),
 (29, 'JOINT ISLAND', 600.00, 18, 'island-black.jpg', 'In Stock'),
-(30, 'FORBIDDEN HONEY', 650.00, 15, 'honey.jpg', 'In Stock'),
-(31, 'BONG ISLAND', 600.00, 19, 'island-white.jpg', 'In Stock'),
-(35, 'test', 599.00, 13, 'ph-11134201-7r98p-lrofwcxc27c99c.jpeg', 'In Stock');
+(30, 'FORBIDDEN HONEY', 650.00, 14, 'honey.jpg', 'In Stock'),
+(31, 'BONG ISLAND', 600.00, 18, 'island-white.jpg', 'In Stock'),
+(35, 'Bini Shirt', 599.00, 11, 'ph-11134201-7r98p-lrofwcxc27c99c.jpeg', 'In Stock');
 
 -- --------------------------------------------------------
 
@@ -225,25 +246,25 @@ ALTER TABLE `admin_tbl`
 -- AUTO_INCREMENT for table `cart_tbl`
 --
 ALTER TABLE `cart_tbl`
-  MODIFY `cart_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `cart_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT for table `customer_tbl`
 --
 ALTER TABLE `customer_tbl`
-  MODIFY `customer_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `customer_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `order_items_tbl`
 --
 ALTER TABLE `order_items_tbl`
-  MODIFY `item_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `item_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `order_tbl`
 --
 ALTER TABLE `order_tbl`
-  MODIFY `order_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `order_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `product_tbl`

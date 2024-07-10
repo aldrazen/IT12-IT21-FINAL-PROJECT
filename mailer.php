@@ -9,12 +9,12 @@ require __DIR__ . "/vendor/autoload.php";
 $mail = new PHPMailer(true);
 
 $mail->isSMTP();
-$mail->Host = "smtp.@sample.com";
+$mail->Host = "smtp.gmail.com";
 $mail->SMTPAuth = true;
-$mail->Username = "email@sample.com";
-$mail->Password = "secret";
+$mail->Username = "drazgamings@gmail.com";
+$mail->Password = "umxvcfpnlsiexylz";
 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-$mail->Port = 0;
+$mail->Port = 587;
 
 $mail->isHTML(true);
 

@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     //password checker
-    if (strlen($password) < 8) {
+    if (strlen($password) < 12) {
         echo "<script>alert('Password must have at least 8 characters.'); window.location.href = '../customer/customerRegister.php';</script>";
         exit();
     }
@@ -55,7 +55,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
     if (!preg_match("#[A-Z]+#", $password)) {
-        echo "<script>alert('Password must have at least 1 uppercase letter.'); window.location.href = '../customer/customerRegister.php';</script>";
+        echo "<script>alert('Password must have at least 1 uppercase character.'); window.location.href = '../customer/customerRegister.php';</script>";
+        exit();
+    }
+    $password_pattern = '/^(?=.*[@$!%*?&])$/';
+    if (!preg_match($password_pattern, $password)) {
+        echo "<script>alert('Password must have at least 1 special character.'); window.location.href = '../customer/customerRegister.php';</script>";
         exit();
     }
 
@@ -87,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           END;
             try {
                 $mail->send();
-                echo "<script> alert('Sign up successful! You will be redirected to your email to activate your account.');window.location.href = 'https://mail.google.com/mail/u/1/?ogbl#inbox';</script>";
+                echo "<script> alert('Sign up successful! You will be redirected to your email to activate your account.');window.location.href = 'https://mail.google.com/mail';</script>";
                 exit();
             } catch (Exception $e) {
                 echo "<script>alert('Message could not be sent. Mailer error: {$mail->ErrorInfo}');window.location.href = '../customer/signupDB.php';</script>";
