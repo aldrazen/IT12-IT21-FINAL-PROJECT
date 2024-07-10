@@ -19,6 +19,24 @@ if (isset($_POST['token']) && isset($_POST['password']) && isset($_POST['confirm
             if (strtotime($user["reset_token_expiry"]) > time()) {
                 // Token is valid and not expired
                 echo "Token is valid and hasn't expired.";
+                //password checker
+                if (strlen($password) < 12) {
+                    echo "<script>alert('Password must have at least 8 characters.'); window.location.href = '../customer/customerRegister.php';</script>";
+                    exit();
+                }
+                if (!preg_match("#[0-9]+#", $password)) {
+                    echo "<script>alert('Password must have at least 1 number.'); window.location.href = '../customer/customerRegister.php';</script>";
+                    exit();
+                }
+                if (!preg_match("#[A-Z]+#", $password)) {
+                    echo "<script>alert('Password must have at least 1 uppercase character.'); window.location.href = '../customer/customerRegister.php';</script>";
+                    exit();
+                }
+                $specialChars = preg_match('@[^\w]@', $password);
+                if (!$specialChars) {
+                    echo "<script>alert('Password must have at least 1 special character.'); window.location.href = '../customer/customerRegister.php';</script>";
+                    exit();
+                }
                 if ($password !== $confirmPassword) {
                     echo "<script>alert('Your passwords do not match!');</script>";
                     exit();

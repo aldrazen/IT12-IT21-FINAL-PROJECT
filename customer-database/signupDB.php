@@ -45,9 +45,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+    if (strlen($phoneNumber) != 11) {
+        echo "<script>alert('Invalid phone number.'); window.location.href = '../customer/customerRegister.php';</script>";
+        exit();
+    }
+
+
     //password checker
     if (strlen($password) < 12) {
-        echo "<script>alert('Password must have at least 8 characters.'); window.location.href = '../customer/customerRegister.php';</script>";
+        echo "<script>alert('Password must have at least 12 characters.'); window.location.href = '../customer/customerRegister.php';</script>";
         exit();
     }
     if (!preg_match("#[0-9]+#", $password)) {
@@ -58,8 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>alert('Password must have at least 1 uppercase character.'); window.location.href = '../customer/customerRegister.php';</script>";
         exit();
     }
-    $password_pattern = '/^(?=.*[@$!%*?&])$/';
-    if (!preg_match($password_pattern, $password)) {
+    $specialChars = preg_match('@[^\w]@', $password);
+    if (!$specialChars) {
         echo "<script>alert('Password must have at least 1 special character.'); window.location.href = '../customer/customerRegister.php';</script>";
         exit();
     }
